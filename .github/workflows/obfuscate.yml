@@ -1,0 +1,88 @@
+name: Obfuscate and Release
+
+on:
+  create:
+    tags:
+      - v*
+
+jobs:
+  obfuscate_code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout DSTools_Bot
+        uses: actions/checkout@v2
+        with:
+          repository: JoahTheron/DSTools_Bot
+          token: ${{ secrets.PAT }}
+          ref: master
+          path: unobfuscated
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.14.0
+
+      - name: Install javascript-obfuscator
+        run: npm install -g javascript-obfuscator
+
+      - name: Remove DSTools_Bot branch
+        working-directory: unobfuscated
+        run: find . -type f | grep -i "\.git" | xargs rm
+
+      - name: Obfuscate JavaScript code
+        working-directory: unobfuscated
+        run: |
+          npx javascript-obfuscator ./src --output ./obfuscated --compact true --control-flow-flattening true --control-flow-flattening-threshold 1 --dead-code-injection true --dead-code-injection-threshold 1 --debug-protection 1 --debug-protection-interval true --disable-console-output true --identifier-names-generator hexadecimal --log false --numbers-to-expressions true --rename-globals false --rename-properties false --rename-properties-mode safe --rotate-string-array true --self-defending true --shuffle-string-array true --simplify true --split-strings true --split-strings-chunk-length 5 --string-array true --string-array-encoding rc4 --string-array-index-shift true --string-array-wrappers-count 5 --string-array-wrappers-chained-calls true --string-array-wrappers-parameters-max-count 5 --string-array-wrappers-type function --string-array-threshold 1 --transform-object-keys true
+          rm -rf ./src
+          mv ./obfuscated src
+
+      - name: Checkout DSTools_Bot_Obfuscated
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          path: obfuscated
+
+      - name: Move obfuscated_code
+        run: |
+          cp -r unobfuscated/* obfuscated
+
+      - name: Push to obfuscated branch
+        working-directory: obfuscated
+        run: |
+          date > generated.txt
+          git config user.name JoahTheron
+          git config user.email markus.horn.1995@gmail.com
+          git add .
+          git commit -m "generated"
+          git push
+
+  release:
+    needs: obfuscate_code
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [windows-latest]
+
+    steps:
+      - name: Checkout DSTools_Bot_Obfuscated
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.14.0
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
+        with:
+          # GitHub token, automatically provided to the action
+          # (No need to define this secret in the repo settings)
+          github_token: ${{ secrets.github_token }}
+
+          # If the commit is tagged with a version (e.g. "v1.0.0"),
+          # release the app after building
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
