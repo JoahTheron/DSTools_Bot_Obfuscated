@@ -1,6 +1,6 @@
 {
   "name": "dstools_bot",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Automate your Gameplay for Tribal Wars",
   "main": "src/index.js",
   "build": {
@@ -22,8 +22,8 @@
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder --windows --linux",
-    "release": "electron-builder --windows --linux --publish always"
+    "build": "electron-builder --windows",
+    "release": "electron-builder --windows --publish always"
   },
   "repository": {
     "type": "git",
