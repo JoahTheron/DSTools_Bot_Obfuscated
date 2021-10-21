@@ -22,7 +22,7 @@
   "scripts": {
     "start": "electron .",
     "postinstall": "electron-builder install-app-deps",
-    "build": "electron-builder --windows",
+    "build": "electron-builder --linux",
     "release": "electron-builder --windows --publish always"
   },
   "repository": {
@@ -37,7 +37,7 @@
   "homepage": "https://github.com/JoahTheron/DSTools_Bot_Obfuscated#readme",
   "devDependencies": {
     "electron": "^13.1.7",
-    "electron-builder": "^22.11.7"
+    "electron-builder": "^22.13.1"
   },
   "dependencies": {
     "electron-is-dev": "^2.0.0",
