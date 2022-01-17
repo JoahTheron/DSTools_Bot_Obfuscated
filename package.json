@@ -1,6 +1,6 @@
 {
   "name": "dstools_bot",
-  "version": "0.4.8",
+  "version": "0.5.0",
   "description": "Automate your Gameplay for Tribal Wars",
   "main": "src/index.js",
   "build": {
@@ -43,6 +43,7 @@
     "@sentry/electron": "^2.5.4",
     "electron-is-dev": "^2.0.0",
     "electron-updater": "^4.3.9",
+    "form-data": "^4.0.0",
     "yargs": "^17.0.1"
   },
   "browserslist": [
