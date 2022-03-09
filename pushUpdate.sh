@@ -11,4 +11,5 @@ else
   git add .
   git commit -am $1
   git tag $1
+  git push && git push --tags
 fi
