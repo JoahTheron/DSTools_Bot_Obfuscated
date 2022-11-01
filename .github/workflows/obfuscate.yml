@@ -21,7 +21,7 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 15.14.0
+          node-version: 16.16.0
 
       - name: Install javascript-obfuscator
         run: npm install -g javascript-obfuscator
@@ -73,7 +73,7 @@ jobs:
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v1
         with:
-          node-version: 15.14.0
+          node-version: 16.16.0
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
